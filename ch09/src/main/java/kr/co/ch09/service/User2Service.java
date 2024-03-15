@@ -59,6 +59,8 @@ public class User2Service {
                         .uid(entity.getUid())
                         .name(entity.getName())
                         .birth(entity.getBirth())
+                        .email(entity.getEmail())
+                        .age(entity.getAge())
                         .addr(entity.getAddr())
                         .build())
                 .toList();
@@ -71,6 +73,7 @@ public class User2Service {
         //수정하기 전에 먼저 존재여부 확인
 
         if(repository.existsById(user2DTO.getUid())){
+            log.info("여기로 들어오니?"+user2DTO.toString());
             //이미 존재하는 아이디이면 수정
             repository.save(user2DTO.toEntity());
 

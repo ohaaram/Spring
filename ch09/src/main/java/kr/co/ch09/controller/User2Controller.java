@@ -28,19 +28,22 @@ public class User2Controller {
 
     @GetMapping("/user2/{uid}")
     public ResponseEntity<?> register(@PathVariable("uid")String uid){
-
         return service.selectUser2(uid);
     }
 
-    @PostMapping("/user2/{uid}")
+    @PostMapping("/user2")
     public ResponseEntity<?> register(@RequestBody @Validated User2DTO user2DTO){
+
+        log.info("왜 에러지?" + user2DTO.toString());
 
        return service.insertUser2(user2DTO);
 
     }
 
     @PutMapping("/user2")
-    public ResponseEntity<?> modify(User2DTO user2DTO){
+    public ResponseEntity<?> modify(@RequestBody User2DTO user2DTO){
+
+        log.info("뭐여 깐뜨롤러-modify"+user2DTO.toString());
 
         return service.updateUser2(user2DTO);
     }

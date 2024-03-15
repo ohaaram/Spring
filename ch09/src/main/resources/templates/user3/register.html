@@ -1,31 +1,27 @@
 <html>
 <head>
-    <title>user2::register</title>
-
+    <title>user3::register</title>
     <script>
-        window.onload = function(){
-
-            const form = document.formUser2;
+        window.onload=function(){
+            const form =document.formUser3;
 
             form.onsubmit = function(e){
                 e.preventDefault();
 
-                const uid = form.uid.value;
-                const name = form.name.value;
-                const birth = form.birth.value;
-                const email = form.email.value;
-                const age = form.age.value;
-                const addr = form.addr.value;
+                const uid=form.uid.value;
+                const name=form.name.value;
+                const birth=form.birth.value;
+                const hp=form.hp.value;
+                const addr=form.addr.value;
 
-                const jsonData = {
+                const jsonData={
                     "uid":uid,
                     "name":name,
                     "birth":birth,
-                    "email":email,
-                    "age":age,
+                    "hp":hp,
                     "addr":addr
                 }
-                fetch('/ch09/user2',{
+                fetch('/ch09/user3',{
                     method:'POST',
                     headers:{'Content-Type':'application/json'},
                     body:JSON.stringify(jsonData)
@@ -34,25 +30,23 @@
                     .then(data=>{
                         console.log(data);
 
-                        if(data!=null) {
+                        if(data!=null){
                             alert('등록 되었습니다.');
-                            location.href='/ch09/user2/list';
+                            location.href='/ch09/user3/list';
                         }
                     })
                     .catch((err)=>{
                         console.log(err);
                     });
-
             }
         }
-
 
     </script>
 </head>
 <body>
-    <h3>user2 등록</h3>
+    <h3>user3 등록</h3>
     <table border="1">
-    <form name="formUser2" method="post">
+    <form name="formUser3" method="post">
             <tr>
                 <td>아이디</td>
                 <td><input type="text" name="uid"></td>
@@ -66,12 +60,8 @@
                 <td><input type="date" name="birth"></td>
             </tr>
             <tr>
-                <td>이메일</td>
-                <td><input type="text" name="email"></td>
-            </tr>
-            <tr>
-                <td>나이</td>
-                <td><input type="text" name="age"></td>
+                <td>휴대폰</td>
+                <td><input type="text" name="hp"></td>
             </tr>
             <tr>
                 <td>주소</td>

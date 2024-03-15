@@ -40,6 +40,8 @@ public class User5Controller {
     @PostMapping("/user5/register")
     public String register(User5DTO user5DTO){
 
+        log.info(user5DTO.toString());
+
         service.insertUser5(user5DTO);
 
         return "redirect:/user5/list";

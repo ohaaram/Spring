@@ -1,0 +1,95 @@
+<html>
+<head>
+    <title>user4::register</title>
+
+    <script>
+        window.onload = function () {
+            const form = document.formUser4;
+
+            form.onsubmit = function (e) {
+                e.preventDefault();
+
+
+                const uid = form.uid.value;
+                const name = form.name.value;
+                const gender = document.querySelector('input[name="gender"]:checked').value;
+                const age = form.age.value;
+                const hp = form.hp.value;
+                const addr = form.addr.value;
+
+
+                console.log("gender : " + gender);
+                console.log("addr: "+addr);
+
+                const jsonData = {
+                    "uid": uid,
+                    "name": name,
+                    "gender": gender,
+                    "age": age,
+                    "hp": hp,
+                    "addr": addr
+                }
+
+                console.log("여기까지는 오니?");
+                console.log("jsonData 찍어보기"+jsonData.toString());
+
+                fetch('/ch09/user4', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(jsonData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+
+                        if (data != null) {
+                            alert('등록 되었습니다.');
+                            location.href = '/ch09/user4/list';
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
+        }
+
+    </script>
+</head>
+<body>
+<h3>user4 등록</h3>
+<table border="1">
+    <form name="formUser4" method="post">
+        <tr>
+            <td>아이디</td>
+            <td><input type="text" name="uid"></td>
+        </tr>
+        <tr>
+            <td>이름</td>
+            <td><input type="text" name="name"></td>
+        </tr>
+        <tr>
+            <td>성별</td>
+            <td>
+                <label><input type="radio" name="gender" value="남">남</label>
+                <label><input type="radio" name="gender" value="여">여</label>
+            </td>
+        </tr>
+        <tr>
+            <td>나이</td>
+            <td><input type="text" name="age"></td>
+        </tr>
+        <tr>
+            <td>휴대폰</td>
+            <td><input type="text" name="hp"></td>
+        </tr>
+        <tr>
+            <td>주소</td>
+            <td><input type="text" name="addr"></td>
+        </tr>
+        <tr>
+            <td colspan="2" align="right"><input type="submit" value="등록"></td>
+        </tr>
+    </form>
+</table>
+</body>
+</html>

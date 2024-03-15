@@ -4,10 +4,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import kr.co.ch07t.entity.user.User5;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import org.springframework.stereotype.Service;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Builder
 public class User5DTO {
 

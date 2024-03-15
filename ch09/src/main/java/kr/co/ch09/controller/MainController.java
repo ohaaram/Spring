@@ -12,22 +12,34 @@ public class MainController {
 
     @GetMapping("/")
     public String index(){
+
+        log.info("여기는 index MainController 로그임");
+
         return "/index";
     }
 
-    @GetMapping("/user1/list")
-    public String user1List(){
-        return "/user1/list";
+    @GetMapping("/user4/list")
+    public String user4List(){
+
+        log.info("여기는 list MainContorller 로그임.");
+
+        return "/user4/list";
     }
 
-    @GetMapping("/user1/register")
-    public String user1Register(){
-        return "/user1/register";
+    @GetMapping("/user4/register")
+    public String user4Register(){
+
+        log.info("register Main Controller 로그");
+
+        return "/user4/register";
     }
 
-    @GetMapping("/user1/modify")
-    public String user1Modify(){
-        return "/user1/modify";
+    @GetMapping("/user4/modify")
+    public String user4Modify(){
+
+        log.info("modify main Controller 로그");
+
+        return "/user4/modify";
     }
 
 }
