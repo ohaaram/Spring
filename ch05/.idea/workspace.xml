@@ -10,14 +10,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d621123f-a8c0-48fd-a902-e0d93ce2ac6b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../sboard/src/main/resources/static/assets/demo/chart-area-demo.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../sboard/src/main/resources/static/assets/demo/chart-bar-demo.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../sboard/src/main/resources/static/assets/demo/chart-pie-demo.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../sboard/src/main/resources/static/assets/demo/datatables-demo.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../sboard/src/main/resources/static/assets/img/error-404-monochrome.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../sboard/src/main/resources/static/css/styles.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../sboard/src/main/resources/static/js/datatables-simple-demo.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../sboard/src/main/resources/static/js/scripts.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Oracle/user/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Oracle/user/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Oracle/user/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Oracle/user/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Oracle/user/src/main/java/kr/co/user/config/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../Oracle/user/src/main/java/kr/co/user/config/AppConfig.java" afterDir="false" />
@@ -28,9 +20,15 @@
       <change beforePath="$PROJECT_DIR$/../../Oracle/user/src/main/webapp/WEB-INF/views/user1/modify.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/../../Oracle/user/src/main/webapp/WEB-INF/views/user1/modify.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Oracle/user/src/main/webapp/WEB-INF/views/user1/register.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/../../Oracle/user/src/main/webapp/WEB-INF/views/user1/register.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Oracle/user/src/main/webapp/index.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/../../Oracle/user/src/main/webapp/index.jsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../ch03/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ch03/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sboard/logs/sboard.log" beforeDir="false" afterPath="$PROJECT_DIR$/../sboard/logs/sboard.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sboard/src/main/java/kr/co/sboard/controller/ArticleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../sboard/src/main/java/kr/co/sboard/controller/ArticleController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sboard/src/main/java/kr/co/sboard/dto/ArticleDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/../sboard/src/main/java/kr/co/sboard/dto/ArticleDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sboard/src/main/java/kr/co/sboard/entity/Article.java" beforeDir="false" afterPath="$PROJECT_DIR$/../sboard/src/main/java/kr/co/sboard/entity/Article.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sboard/src/main/java/kr/co/sboard/entity/File.java" beforeDir="false" afterPath="$PROJECT_DIR$/../sboard/src/main/java/kr/co/sboard/entity/File.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sboard/src/main/java/kr/co/sboard/service/ArticleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../sboard/src/main/java/kr/co/sboard/service/ArticleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sboard/src/main/java/kr/co/sboard/service/FileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../sboard/src/main/java/kr/co/sboard/service/FileService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sboard/src/main/resources/templates/article/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/../sboard/src/main/resources/templates/article/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../sboard/src/main/resources/templates/article/view.html" beforeDir="false" afterPath="$PROJECT_DIR$/../sboard/src/main/resources/templates/article/view.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../security1/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../security1/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -226,6 +224,7 @@
       <workItem from="1710726781814" duration="335000" />
       <workItem from="1710730048332" duration="343000" />
       <workItem from="1710761183192" duration="455000" />
+      <workItem from="1710925230329" duration="16000" />
     </task>
     <servers />
   </component>
