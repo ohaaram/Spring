@@ -1,0 +1,367 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/defaultLayout}">
+
+<div class="container-fluid px-4" layout:fragment="content">
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+
+        let isPPassOk = false;
+        let isPassOk = false;
+        let isNickOk = false;
+        let isEmailOk = false;
+        let isEmailCodeOk = false;
+
+        window.onload = function () {
+
+            const rePass = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,16}$/;
+            const reNick = /^[a-zA-Zㄱ-힣0-9][a-zA-Zㄱ-힣0-9]*$/;
+            const reEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+
+
+            //버튼 클릭시 정보수정
+            const btnPut = document.getElementById('btnPut');
+            const putForm = document.getElementsByName('putForm')[0];
+
+            btnPut.onclick = function (e) {
+                e.preventDefault(); // 링크 이동 기본 동작 중지
+
+                alert("클릭!");
+
+                console.log("여기는 정보수정 버튼을 눌렀을때 들어오는곳");
+
+                putForm.submit();//post방식으로 전송
+            }
+
+
+            const inputPass1 = document.getElementById('pass1');
+            const inputPass2 = document.getElementById('pass2');
+
+            inputPass2.addEventListener('focusout', () => {
+
+
+                console.log("inputPass1 : " + inputPass1.value);
+                console.log("inputPass2 : " + inputPass2.value);
+
+
+                if (inputPass1.value === inputPass2.value) {
+
+                    console.log("여기는 비밀번호 두개값이 일단같으면 들어와...1 ");
+                    isPassOk = true;
+
+                    if (!inputPass1.value.match(rePass)) {
+                        inputPass1.classList.add('is-invalid');
+                        inputPass2.classList.add('is-invalid');
+                        isPPassOk = false;
+                        console.log("여기는 정해진 형식에 안맞으면 들어와...2");
+
+                    } else {
+                        inputPass1.classList.add('is-valid');
+                        inputPass2.classList.add('is-valid');
+                        isPPassOk = true;//형식체크
+                        console.log("여기는 형식에 맞으면 들어와...3 ");
+
+                    }
+                } else {
+                    inputPass1.classList.add('is-invalid');
+                    inputPass2.classList.add('is-invalid');
+                    console.log("여기는 비밀번호가 서로 맞지 않으면 들어옴....4")
+                    isPassOk = false;//비밀번호가 맞지 않음
+                }
+            });
+
+
+            const btnChange = document.getElementById('btnChange');
+            const inputUid = document.getElementById('inputUid');
+
+            console.log("패스워드 : " + inputPass1.value);
+            console.log("아이디 : " + inputUid.value);
+
+
+            btnChange.onclick = async function (e) {
+                e.preventDefault();
+
+                console.log("isPPassOk : " + isPPassOk);
+                console.log("isPassOk : " + isPassOk);
+
+
+                if (!isPassOk) {
+                    alert("비밀번호가 일치하지 않습니다.");
+                }
+                if (!isPPassOk) {
+                    alert("비밀번호 형식이 잘 못 되었습니다.");
+                } else {
+
+                    console.log("바꿀 비밀번호 : " + inputPass2.value);
+
+
+                    const jsonData = {
+
+                        "pass": inputPass1.value,
+                        "uid": inputUid.value
+                    };
+
+                    const data = await fetchPost(`/sboard/user/findPasswordChange`, jsonData);
+
+                    if (data.result > 0) {
+                        alert('변경이 되었습니다.');
+                        location.href = '/sboard/my/setting';
+                    } else {
+                        alert("비밀번호 변경 중 오류가 발생했습니다. 다시 시도해주십시오");
+                    }
+                }
+            }//비밀번호 변경부분 끝
+
+            //닉네임 중복확인 시작////////////
+            const btnCheckNick = document.getElementById('btnCheckNick');
+
+            btnCheckNick.onclick = function () {
+
+                const input = document.getElementById('inputNick');
+                const type = input.dataset.type;
+
+                console.log("type " + type);
+                console.log('value : ' + input.value);
+
+                // 정규식 검사
+                if (!input.value.match(reNick)) {
+                    input.classList.add('is-invalid');
+                    isNickOk = false;//형식이 맞지 않음
+                    alert('닉네임 형식에 맞지않습니다.!');
+                }
+
+                console.log("닉네임형식에는 맞아서 사용중인건지 체크하러 가는길");
+
+                setTimeout(async () => {//왜인지는 모르겠으나 async와 await가 있어야지 fetchGet이 json(data)을 받아오는듯
+
+                    const data = await fetchGet(`/sboard/user/${type}/${input.value}`);
+
+                    console.log("패치하고 넘어오는 data :" + data);
+
+                    console.log("data.result :" + data.result);
+
+                    if (data.result > 0) {
+                        console.log("사용중인것");
+                        input.classList.add('is-invalid');
+                        alert('이미 사용중인 닉네임입니다. 다시 입력해주세요')
+                        isNickOk = false;//이미 사용중인 닉네임
+                    } else {
+                        console.log("사용중이지 않네");
+                        input.classList.add('is-valid');
+                        alert('사용가능한 닉네임입니다.');
+                        isNickOk = true;//사용가능한 닉네임
+                    }
+                }, 1000);
+            }//닉네임 확인 끝
+
+
+            //이메일 시작
+
+            const inputEmail = document.getElementById('inputEmail');
+            const btnCheckEmail = document.getElementById('btnCheckEmail');
+
+            btnCheckEmail.onclick = function () {
+
+                const type = inputEmail.dataset.type;
+
+                // 유효성 검사
+                if (!inputEmail.value.match(reEmail)) {
+                    inputEmail.classList.add('is-invalid');
+                    alert('이메일 형식에 맞지 않습니다.');
+                    isEmailOk=false;
+                    inputEmail.value = '';//클리어 해주기
+                    return
+                }
+                document.getElementById('codeInputWrapper').style.display = 'flex';
+
+                setTimeout(async () => {
+
+                    console.log('type : ' + type);
+                    console.log('inputEmail value : ' + inputEmail.value);
+
+                    const data = await fetchGet(`/sboard/user/${type}/${inputEmail.value}`);
+                    console.log('data : ' + data.result);
+
+                    if (data.result > 0) {
+                        inputEmail.classList.add('is-invalid');
+                        isEmailOk=false;
+                        alert("사용중인 이메일 입니다.");
+                    } else {
+                        isEmailOk=true;
+                        alert('사용가능한 이메일 입니다.');
+                    }
+                }, 1000);
+
+            }//이메일 유효성 및 보내기 종료
+
+
+            //이메일 코드인증 시작
+            const btnCheckEmailCode = document.getElementById('btnCheckEmailCode');
+            const inputEmailCode = document.getElementById('inputEmailCode');
+
+            btnCheckEmailCode.onclick = async function () {
+                const data = await fetchGet(`/sboard/email/${inputEmailCode.value}`);
+
+                if (!data.result) {
+                    inputEmail.classList.add('is-invalid');
+                    inputEmailCode.classList.add('is-invalid');
+                    alert('인증 번호가 다릅니다.');
+                } else {
+                    inputEmail.classList.add('is-valid');
+                    inputEmailCode.classList.add('is-valid');
+                    alert('인증이 완료되었습니다.');
+                }
+            }//이메일 인증 끝
+
+            //주소 처리 시작
+            const inputZip = document.getElementById('inputZip');
+            inputZip.onclick = function () {
+                postcode();
+            }//주소 끝
+            ////////////////////////////////////////////////////////정보수정 끝!////////////////////////////////////////////////////
+
+            ////////////////////////////////////////////회원탈퇴 시작!/////////////////////////////////////////////////////////////
+            const btnDelete = document.getElementsByName('btnDelete')[0];
+
+            btnDelete.onclick = function (e){
+                e.preventDefault();
+
+
+            }
+
+
+        }
+
+    </script>
+
+    <h3 class="mt-4 mb-4">나의 설정</h3>
+
+    <!-- 내용 시작 -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            회원정보 설정
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <tr>
+                    <td class="col-md-2">아이디</td>
+                    <td class="col-md-10"><input class="form-control w-50" type="text" name="uid" id="inputUid"
+                                                 th:value="${userDTO.uid}" readonly></td>
+                </tr>
+                <tr>
+                    <td>비밀번호</td>
+                    <td><input class="form-control w-50" type="password" name="pass1" id="pass1"></td>
+                </tr>
+                <tr>
+                    <td>비밀번호 확인</td>
+                    <td class="d-flex">
+                        <input class="form-control w-50" type="password" name="pass2" id="pass2">
+                        <button class="btn btn-primary ms-2" id="btnChange">비밀번호 변경</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>회원가입일</td>
+                    <td><input class="form-control border-0" type="text" name="regDate"
+                               th:value="${#strings.substring(userDTO.regDate, 0, 10)}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                개인정보 수정
+            </div>
+            <div class="card-body">
+                <form name="putForm" th:action="@{/my/setting}" method="post">
+                    <input type="hidden" name="uid" th:value="${userDTO.uid}">
+                <table class="table">
+                    <tr>
+                        <td class="col-md-2">이름</td>
+                        <td class="col-md-10"><input class="form-control w-50" type="text" name="name"
+                                                     th:value="${userDTO.name}"></td>
+                    </tr>
+                    <tr>
+                        <td>별명</td>
+                        <td class="d-flex">
+                            <input class="form-control w-50" type="text" name="nick" id="inputNick" data-type="nick"
+                                   th:value="${userDTO.nick}">
+                            <button type="button" class="btn btn-primary ms-2" id="btnCheckNick">중복확인</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>이메일</td>
+                        <td class="d-flex">
+                            <input class="form-control w-50" type="text" name="email" id="inputEmail" data-type="email"
+                                   th:value="${userDTO.email}">
+                            <button type="button" class="btn btn-primary ms-2" id="btnCheckEmail">이메일 인증</button>
+                            <div id="codeInputWrapper" style="display: none;">
+                                <input type="text" id="inputEmailCode" placeholder="코드입력">
+                                <button type="button" id="btnCheckEmailCode">인증</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>휴대폰</td>
+                        <td>
+                            <input class="form-control w-50" type="text" name="hp" th:value="${userDTO.hp}"
+                                   placeholder="휴대폰 입력"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>주소</td>
+                        <td>
+                            <input class="form-control w-25 mb-2" type="text" name="zip" id="inputZip"
+                                   th:value="${userDTO.zip}" readonly
+                                   placeholder="우편번호 검색"/>
+                            <input class="form-control w-75 mb-2" type="text" name="addr1" id="inputAddr1"
+                                   th:value="${userDTO.addr1}"
+                                   readonly placeholder="기본주소 입력"/>
+                            <input class="form-control w-75 mb-2" type="text" name="addr2" id="inputAddr2"
+                                   th:value="${userDTO.addr2}"
+                                   placeholder="상세주소 입력"/>
+                        </td>
+                    </tr>
+                </table>
+                </form>
+
+            </div>
+        </div>
+
+
+        <div class="text-end mb-4">
+            <a th:href="@{/my/setting}" class="btn btn-primary" id="btnPut">정보수정</a>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                회원탈퇴
+            </button>
+        </div>
+
+    <!-- Button trigger modal -->
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    정말 탈퇴하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">아니오</button>
+                    <button type="button" name="btnDelete" class="btn btn-danger">예</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 내용 끝 -->
+</div>
+</html>

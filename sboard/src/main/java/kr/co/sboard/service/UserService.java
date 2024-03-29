@@ -4,6 +4,7 @@ import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
+import kr.co.sboard.dto.ArticleDTO;
 import kr.co.sboard.dto.TermsDTO;
 import kr.co.sboard.dto.UserDTO;
 import kr.co.sboard.mapper.UserMapper;
@@ -31,6 +32,12 @@ public class UserService {
 
     public TermsDTO selectTerms(){
         return userMapper.selectTerms();
+    }
+
+    public String selectUser(String email){
+
+         return userMapper.selectUser(email);
+
     }
 
     public int selectCountUser(String type,String value){
@@ -76,6 +83,30 @@ public class UserService {
         }catch(Exception e){
             log.error("sendEmailConde : " + e.getMessage());
         }
+
+    }
+
+    public UserDTO selectUser(UserDTO userDTO){
+        return userMapper.selectUser(userDTO.getName(), userDTO.getEmail());
+    }
+
+    public UserDTO findPass(UserDTO userDTO){
+        return userMapper.findPass(userDTO.getUid(),userDTO.getEmail());
+    }
+
+    public UserDTO findById(String uid){
+        return userMapper.findById(uid);
+    }
+
+    public void updatePass(UserDTO userDTO){
+        String encoded = passwordEncoder.encode(userDTO.getPass());
+        userDTO.setPass(encoded);
+
+        userMapper.updatePass(userDTO.getPass(),userDTO.getUid());
+    }
+
+    public void updateInfo(UserDTO userDTO){
+        userMapper.updateInfo(userDTO);
 
     }
 

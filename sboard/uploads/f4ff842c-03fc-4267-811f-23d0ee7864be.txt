@@ -1,0 +1,4 @@
+http://3.35.0.185/board/modify.html
+http://3.35.0.185/board/view.html
+http://3.35.0.185/board/write.html
+

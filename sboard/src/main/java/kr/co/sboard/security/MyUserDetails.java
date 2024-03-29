@@ -9,20 +9,27 @@ import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 
 @Getter
 @Setter
 @Builder
 @ToString
-public class MyUserDetails implements UserDetails {
+public class MyUserDetails implements UserDetails, OAuth2User {
 
     //User 엔티티
     private User user;
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return null;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {//권한 목록
@@ -65,5 +72,10 @@ public class MyUserDetails implements UserDetails {
     public boolean isEnabled() {
         //계정 활성화 여부(true : 활성화, false : 비활성화)
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 }

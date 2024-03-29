@@ -1,5 +1,6 @@
 package kr.co.sboard.service;
 
+import com.querydsl.core.Tuple;
 import kr.co.sboard.dto.ArticleDTO;
 import kr.co.sboard.dto.FileDTO;
 import kr.co.sboard.dto.PageRequestDTO;
@@ -33,61 +34,123 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final FileRepository fileRepository;
     private final  FileService fileService;
-    //RootConfig Bean 생성 등록
+
     private final ModelMapper modelMapper;
 
 
     public void insertArticle(ArticleDTO articleDTO) {
 
-        //파일 첨부 처리
-        List<FileDTO> files = fileService.fileUpload(articleDTO);
+        List<FileDTO> files=null;
 
-        //파일 첨부 갯수 초기화(?이거 왜 하지?)
-        articleDTO.setFile(files.size());
+        if(articleDTO.getFiles()!=null) {
 
-        log.info("이거는 뭐 들어가지?:" + articleDTO);
+            //파일 첨부 처리
+            files = fileService.fileUpload(articleDTO);
 
-        Article article = modelMapper.map(articleDTO, Article.class);//위랑 똑같음
-        //대신에 DTO와 Entity에 to~~안만들어도 됨.
+            //파일 첨부 갯수 초기화
+            articleDTO.setFile(files.size());
+        }
+
+        Article article = modelMapper.map(articleDTO, Article.class);
 
         log.info("저장되는 article값을 보자:" + article.toString());
 
         //저장 후 저장한 엔티티 객체 반환(사실 JPA save() 메서드는 default로 저장한 Entity를 반환)
         Article savedArticle = articleRepository.save(article);
 
-        for(FileDTO fileDTO:files){
-            fileDTO.setAno(savedArticle.getNo());
+       if(files!=null) {
+           for (FileDTO fileDTO : files) {
+               fileDTO.setAno(savedArticle.getNo());
 
-           File file = modelMapper.map(fileDTO, File.class);
+               File file = modelMapper.map(fileDTO, File.class);
 
-            fileRepository.save(file);
-        }
+               fileRepository.save(file);
+           }
+       }
 
     }
 
 
 
-    public ArticleDTO selectArticle(int no) {
+    public ArticleDTO findById(int no) {
 
         log.info("no값을 알려줭" + no);
 
         Optional<Article> result = articleRepository.findById(no);
+
         Article article = result.get();
 
-        return modelMapper.map(article, ArticleDTO.class);
+        log.info("article볼껀데:"+article.toString());
+
+        ArticleDTO articleDTO = modelMapper.map(article, ArticleDTO.class);
+
+        log.info("매퍼로 변환하고의 상태 : "+articleDTO.toString());
+
+        return articleDTO;
 
     }
 
-    public PageResponseDTO findByParentAndCate(PageRequestDTO pageRequestDTO) {
+    public PageResponseDTO selectArticles(PageRequestDTO pageRequestDTO) {
+
+        log.info("selectArticles...1");
+
+        Pageable pageable = pageRequestDTO.getPageable("no");//sort한 글 번호
+
+        log.info("selectArticles...2");
+
+        Page<Tuple> pageArticle = articleRepository.selectArticles(pageRequestDTO,pageable);
+
+
+        log.info("selectArticles...3");
+
+        List<ArticleDTO> dtoList = pageArticle.getContent().stream()
+                .map(tuple ->
+                        {
+                            log.info("tuple : " + tuple);
+                            Article article = tuple.get(0, Article.class);
+                            String nick = tuple.get(1, String.class);
+                            article.setNick(nick);
+
+                            log.info("article : " + article);
+
+                            return modelMapper.map(article, ArticleDTO.class);
+                        }
+                )
+                .toList();
+
+        log.info("selectArticles...4");
+
+        int total = (int)pageArticle.getTotalElements();
+
+        return PageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(dtoList)
+                .total(total)
+                .build();
+    }
+
+
+    public PageResponseDTO searchArticles(PageRequestDTO pageRequestDTO) {
 
 
         Pageable pageable = pageRequestDTO.getPageable("no");//sort한 글 번호
 
-        Page<Article> pageArticle = articleRepository.findByParentAndCate(0,pageRequestDTO.getCate(),pageable);
+        Page<Tuple> pageArticle = articleRepository.searchArticles(pageRequestDTO,pageable);
 
 
         List<ArticleDTO> dtoList = pageArticle.getContent().stream()
-                .map(entity -> modelMapper.map(entity, ArticleDTO.class))
+                .map(tuple ->
+                        {
+                            log.info("tuple : " + tuple);
+                            Article article = tuple.get(0, Article.class);
+                            String nick = tuple.get(1, String.class);
+                            article.setNick(nick);
+
+                            log.info("article : " + article);
+
+                            return modelMapper.map(article, ArticleDTO.class);
+                        }
+                )
                 .toList();
 
         int total = (int)pageArticle.getTotalElements();
@@ -97,16 +160,33 @@ public class ArticleService {
                 .dtoList(dtoList)
                 .total(total)
                 .build();
+    }
 
 
+
+
+
+
+    public void update(ArticleDTO articleDTO){
+
+        log.info("article-service-update : "+articleDTO.toString());
+
+        Article article = modelMapper.map(articleDTO, Article.class);//위랑 똑같음
+
+        articleRepository.save(article);
 
     }
 
-    public void updateArticle() {
+    public void hitUp(ArticleDTO articleDTO){
+
+        articleDTO.setHit(articleDTO.getHit()+1);
+
+        Article article = modelMapper.map(articleDTO, Article.class);
+
+        log.info("조회수에 관한 hitUp 메서드 : "  +article.toString());
+
+        articleRepository.save(article);
 
     }
 
-    public void deleteArticle() {
-
-    }
 }

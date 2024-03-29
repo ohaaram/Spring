@@ -1,5 +1,6 @@
 package kr.co.sboard.security;
 
+import kr.co.sboard.oauth2.OAuth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,6 +29,14 @@ public class SecurityConfig {
                 .invalidateHttpSession(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                 .logoutSuccessUrl("/user/login?success=300"));
+
+        //OAuth 설정
+        httpSecurity.oauth2Login(oauth->oauth
+                                            .loginPage("/user/login")
+                                            .defaultSuccessUrl("/"));
+
+
+
 
         httpSecurity.authorizeHttpRequests(authorize -> authorize
 

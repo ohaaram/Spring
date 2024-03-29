@@ -1,20 +1,55 @@
-async function fetchData(url){
+async function fetchGet(url){
+
+    console.log("fetchData1...1");
+
     try{
+        console.log("fetchData1...2");
         const response = await fetch(url);
+        console.log("here1");
 
         if(!response.ok){
+            console.log("here2");
             throw new Error('response not ok');
         }
 
         const data = await response.json();
-
+        console.log("data1 : " + data);
         return data;
-
-    }catch(err){
-        console.log(err);
+    }catch (err) {
+        console.log(err)
     }
-
 }
+
+
+async function fetchPost(url, data){
+
+    console.log("fetchData2...1");
+
+    try{
+        console.log("fetchData2...2");
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {"Content-type":"application/json"},
+            body: JSON.stringify(data)
+        });
+        console.log("fetchData2...3");
+
+        if(!response.ok){
+            console.log("fetchData2...4");
+            throw new Error('response not ok');
+        }
+
+        const result = await response.json();
+        console.log("fetchData2...5 : " + result);
+
+        return result;
+
+    }catch (err) {
+        console.log(err)
+    }
+}
+
+
 
 function showModal(message){
     const modal = document.getElementById('resultModal');
