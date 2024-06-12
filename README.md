@@ -1,7 +1,7 @@
 # Spring
 
-날짜 : 2024/03/04
-내용 : Spring IoC/DI 실습하기
+#날짜 : 2024/03/04
+#내용 : Spring IoC/DI 실습하기
   
   @Configuration
    - 애플리케이션을 구성하는 빈을 등록하기 위한 설정 클래스
